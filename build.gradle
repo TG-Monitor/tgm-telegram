@@ -14,3 +14,14 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+}
+dependencies {
+    //implementation 'com.github.tg-monitor:backend:c8774e3fb34b1c3e10721b15afb1f63948da1c9c'
+    // Temporary fix until GitHub issue is resolved and the above works again
+    compile files('../backend/build/libs/backend-0.0.1.jar')
+}
