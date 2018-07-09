@@ -50,7 +50,7 @@ async def get_sender(message):
     sender_dict['id'] = sender.id
     sender_dict['isBot'] = sender.bot
     sender_dict['isContact'] = sender.contact
-    sender_dict['firstName'] = sender.firstName
+    sender_dict['firstName'] = sender.first_name
     sender_dict['lastName'] = sender.last_name
     sender_dict['username'] = sender.username
     sender_dict['phone'] = sender.phone
