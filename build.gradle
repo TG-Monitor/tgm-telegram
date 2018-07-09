@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'com.google.code.findbugs:jsr305:3.0.2'
+    compile 'com.google.code.gson:gson:2.8.5'
 }
 
 allprojects {
@@ -21,7 +23,6 @@ allprojects {
     }
 }
 dependencies {
-    //implementation 'com.github.tg-monitor:backend:c8774e3fb34b1c3e10721b15afb1f63948da1c9c'
-    // Temporary fix until GitHub issue is resolved and the above works again
+    //implementation 'com.github.tg-monitor:backend:86387afc00af800276d5ad094251c1f294a7d9ac'
     compile files('../backend/build/libs/backend-0.0.1.jar')
 }
