@@ -2,7 +2,7 @@ package ai.quantumsense.tgmonitor.telethon;
 
 import ai.qantumsense.tgmonitor.telethon.DataMapper;
 import ai.qantumsense.tgmonitor.telethon.datamapping.JsonGsonDataMapper;
-import ai.quantumsense.tgmonitor.backend.datastruct.TelegramMessage;
+import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
 import org.junit.Test;
 
 public class DataMapperTest {

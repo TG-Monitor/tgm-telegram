@@ -1,6 +1,6 @@
 package ai.qantumsense.tgmonitor.telethon;
 
-import ai.quantumsense.tgmonitor.backend.datastruct.TelegramMessage;
+import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
 
 public interface DataMapper {
     /**

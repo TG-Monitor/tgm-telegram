@@ -6,8 +6,8 @@ import ai.qantumsense.tgmonitor.telethon.datamapping.JsonGsonDataMapper;
 import ai.quantumsense.tgmonitor.backend.Interactor;
 import ai.quantumsense.tgmonitor.backend.LoginCodeReader;
 import ai.quantumsense.tgmonitor.backend.Telegram;
-import ai.quantumsense.tgmonitor.backend.datastruct.PatternMatch;
-import ai.quantumsense.tgmonitor.backend.datastruct.TelegramMessage;
+import ai.quantumsense.tgmonitor.backend.pojo.PatternMatch;
+import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
 import org.junit.BeforeClass;
 
 import javax.swing.JOptionPane;

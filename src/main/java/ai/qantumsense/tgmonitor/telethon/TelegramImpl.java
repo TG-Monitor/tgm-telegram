@@ -3,7 +3,7 @@ package ai.qantumsense.tgmonitor.telethon;
 import ai.quantumsense.tgmonitor.backend.Interactor;
 import ai.quantumsense.tgmonitor.backend.LoginCodeReader;
 import ai.quantumsense.tgmonitor.backend.Telegram;
-import ai.quantumsense.tgmonitor.backend.datastruct.TelegramMessage;
+import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
