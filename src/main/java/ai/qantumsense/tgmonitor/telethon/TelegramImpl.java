@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class TelegramImpl implements Telegram {
 
@@ -40,23 +41,18 @@ public class TelegramImpl implements Telegram {
         this.dataMapper = dataMapper;
     }
 
-    /**
-     * Side effect: creates the master session file.
-     * @param phoneNumber
-     */
     @Override
     public void login(String phoneNumber) {
         // Send login code to user's device
         String phoneCodeHash = (new ProcRunner(SCRIPT_LOGIN_REQUEST, tgApiId, tgApiHash, MASTER_SESSION, phoneNumber)).runCheck();
+        if (phoneCodeHash.equals("null"))
+            throw new RuntimeException("Attempting to log in, but already logged in");
         // Prompt user to input login code
         String loginCode = loginCodeReader.getLoginCodeFromUser();
         // Complete login with login code
         (new ProcRunner(SCRIPT_LOGIN_SUBMIT, tgApiId, tgApiHash, MASTER_SESSION, phoneNumber, loginCode, phoneCodeHash)).runCheck();
     }
 
-    /**
-     * Side effect: deletes the master session file.
-     */
     @Override
     public void logout() {
         for (String peer : procs.keySet()) stop(peer);
@@ -73,6 +69,7 @@ public class TelegramImpl implements Telegram {
     public void start(String peer) {
         if (procs.containsKey(peer))
             throw new RuntimeException("Attempting to start monitor for '" + peer + "', but this monitor already exists");
+        procs.put(peer, null);  // Make sure spot is occupied when start() returns
         Thread thread = new Thread(() -> {
             try {
                 String session = copyMasterSession();
@@ -103,7 +100,12 @@ public class TelegramImpl implements Telegram {
     }
 
     @Override
-    public int numberOfMonitors() {
+    public Set<String> getMonitors() {
+        return procs.keySet();
+    }
+
+    @Override
+    public int getNumberOfMonitors() {
         return procs.size();
     }
 

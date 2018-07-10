@@ -8,29 +8,40 @@ import ai.quantumsense.tgmonitor.backend.LoginCodeReader;
 import ai.quantumsense.tgmonitor.backend.Telegram;
 import ai.quantumsense.tgmonitor.backend.datastruct.PatternMatch;
 import ai.quantumsense.tgmonitor.backend.datastruct.TelegramMessage;
-import org.junit.Test;
+import org.junit.BeforeClass;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
-public class TelegramImplTest {
+/**
+ * Common code for the two Telegram test classes TelegramAuthTest and
+ * TelegramExecTest.
+ *
+ * To use these test suites, you must set the following environment variables
+ * in the run configuration:
+ *   - TG_API_ID: Telegram API ID
+ *   - TG_API_HASH: Telegram API hash
+ *   - PHONE_NUMBER: phone number of the Telegram account to use
+ */
+public abstract class AbsTelegramTest {
+    static final String MASTER_SESSION = "master.session";
+    static Telegram tg;
+    static String phoneNumber;
 
-    @Test
-    public void testTelegramImpl() {
+    @BeforeClass
+    public static void getPhoneNumber() {
+        phoneNumber = System.getenv("PHONE_NUMBER");
+        if (phoneNumber == null)
+            throw new RuntimeException("Must set PHONE_NUMBER environment variable");
+    }
+
+    @BeforeClass
+    public static void createTelegramImplInstance() {
         String tgApiId = System.getenv("TG_API_ID");
         String tgApiHash = System.getenv("TG_API_HASH");
         if (tgApiId == null || tgApiHash == null)
             throw new RuntimeException("Must set TG_API_ID and TG_API_HASH environment variables");
-
         DataMapper mapper = new JsonGsonDataMapper();
-
-        LoginCodeReader loginCodeReader = new LoginCodeReader() {
-            @Override
-            public String getLoginCodeFromUser() {
-                String loginCode = JOptionPane.showInputDialog("Please enter login code");
-                return loginCode;
-            }
-        };
-
+        LoginCodeReader loginCodeReader = () -> JOptionPane.showInputDialog("Please enter login code");
         Interactor interactor = new Interactor() {
             @Override
             public void messageReceived(TelegramMessage msg) {
@@ -39,24 +50,6 @@ public class TelegramImplTest {
             @Override
             public void matchFound(PatternMatch patternMatch) {}
         };
-
-        Telegram tg = new TelegramImpl(tgApiId, tgApiHash, interactor, loginCodeReader, mapper);
-        if (tg.isLoggedIn()) {
-            tg.start("the_englishclub");
-        }
-
-        // Prevent main thread from exiting, because that would terminate the test
-        boolean stillRunning;
-        do {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            stillRunning = false;
-            for (Thread t : Thread.getAllStackTraces().keySet())
-                if (t.getName().equals("tg-monitor")) stillRunning = true;
-        } while (stillRunning);
-        System.out.println("Main thread exited");
+        tg = new TelegramImpl(tgApiId, tgApiHash, interactor, loginCodeReader, mapper);
     }
 }

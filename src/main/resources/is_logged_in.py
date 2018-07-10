@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
 #
-# Test whether current session is in an authorised (logged in) state or not.
+# Test whether specified session is logged in.
 #
-# The script prints "true" if logged in, and "false" if not logged in.
+# The following scenarios are valid use cases:
+#   1) The session file exists and the session is logged in
+#   2) The session file exists and the session is logged out
+#   3) The session file doesn't exist
+#
+# The script handles these cases in the following way:
+#   1) Session is logged in: print "true"
+#   2) Session is logged out: print "false"
+#   3) Session is logged out: print "false"
+#
+# Output: the script prints to stdout "true" if the session is logged in, and
+# "false" otherwise.
 #------------------------------------------------------------------------------#
 
 import telethon.sync
