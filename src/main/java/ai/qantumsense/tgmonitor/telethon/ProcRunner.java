@@ -16,6 +16,9 @@ public class ProcRunner {
      * @param cmd The tokens of the command to execute.
      */
     public ProcRunner(String... cmd) {
+        StringBuilder sb = new StringBuilder("Running command: ");
+        for (String s : cmd) sb.append(s + " ");
+        System.out.println(sb.toString());
         pb = new ProcessBuilder(cmd);
     }
 
