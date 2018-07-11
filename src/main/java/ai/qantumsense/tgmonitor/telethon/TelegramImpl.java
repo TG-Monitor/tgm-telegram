@@ -20,11 +20,11 @@ import java.util.Set;
 public class TelegramImpl implements Telegram {
 
     private final String MASTER_SESSION = "master";
-    private final String SCRIPT_LOGIN_REQUEST = this.getClass().getResource( "/login_code_request.py").getPath();
-    private final String SCRIPT_LOGIN_SUBMIT = this.getClass().getResource("/login_code_submit.py").getPath();
-    private final String SCRIPT_IS_LOGGED_IN = this.getClass().getResource("/is_logged_in.py").getPath();
-    private final String SCRIPT_LOGOUT = this.getClass().getResource("/logout.py").getPath();
-    private final String SCRIPT_MONITOR_PEER = this.getClass().getResource("/monitor_peer.py").getPath();
+    private final String SCRIPT_LOGIN_REQUEST = TelegramImpl.class.getResource( "/login_code_request.py").getPath();
+    private final String SCRIPT_LOGIN_SUBMIT = TelegramImpl.class.getClass().getResource("/login_code_submit.py").getPath();
+    private final String SCRIPT_IS_LOGGED_IN = TelegramImpl.class.getClass().getResource("/is_logged_in.py").getPath();
+    private final String SCRIPT_LOGOUT = TelegramImpl.class.getClass().getResource("/logout.py").getPath();
+    private final String SCRIPT_MONITOR_PEER = TelegramImpl.class.getClass().getResource("/monitor_peer.py").getPath();
 
     private String tgApiId;
     private String tgApiHash;
