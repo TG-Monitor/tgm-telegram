@@ -1,7 +1,6 @@
 package ai.quantumsense.tgmonitor.telethon;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -24,7 +23,6 @@ import java.util.Set;
  */
 public class TelegramExecTest extends AbsTelegramTest {
 
-    @Ignore
     @Test
     // The sleep(1) calls are needed because the session files and processes
     // are created/removed asynchronously by a thread. So, at the time the
@@ -53,7 +51,6 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Ignore
     @Test
     // The sleep(1) calls are needed because the session files and processes
     // are created/removed asynchronously by a thread. So, at the time the
@@ -99,7 +96,6 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Ignore
     @Test
     public void getNumberOfMonitors() {
         String peer1 = "the_englishclub";
@@ -133,7 +129,6 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Ignore
     @Test
     public void getMonitors() {
         String peer1 = "the_englishclub";
@@ -171,7 +166,6 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Ignore
     @Test
     public void startButAlreadyExists() {
         String peer = "the_englishclub";
@@ -194,7 +188,6 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Ignore
     @Test
     public void stopButDoesNotExist() {
         String peer = "the_englishclub";

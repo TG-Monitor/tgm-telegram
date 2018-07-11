@@ -1,9 +1,9 @@
 package ai.qantumsense.tgmonitor.telethon;
 
-import ai.quantumsense.tgmonitor.backend.Interactor;
-import ai.quantumsense.tgmonitor.backend.LoginCodeReader;
+import ai.quantumsense.tgmonitor.backend.InteractorFactory;
 import ai.quantumsense.tgmonitor.backend.Telegram;
 import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
+import ai.quantumsense.tgmonitor.monitor.LoginCodeReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,17 +28,17 @@ public class TelegramImpl implements Telegram {
 
     private String tgApiId;
     private String tgApiHash;
-    private Interactor interactor;
-    private LoginCodeReader loginCodeReader;
     private DataMapper dataMapper;
+    private LoginCodeReader loginCodeReader;
     private Map<String, Process> procs = new HashMap<>();
+    private InteractorFactory interactorFactory;
 
-    public TelegramImpl(String tgApiId, String tgApiHash, Interactor interactor, LoginCodeReader loginCodeReader, DataMapper dataMapper) {
+    public TelegramImpl(String tgApiId, String tgApiHash, DataMapper dataMapper, LoginCodeReader loginCodeReader, InteractorFactory interactorFactory) {
         this.tgApiId = tgApiId;
         this.tgApiHash = tgApiHash;
-        this.interactor = interactor;
-        this.loginCodeReader = loginCodeReader;
         this.dataMapper = dataMapper;
+        this.loginCodeReader = loginCodeReader;
+        this.interactorFactory = interactorFactory;
     }
 
     @Override
@@ -79,8 +79,7 @@ public class TelegramImpl implements Telegram {
                 String line;
                 while ((line = stdout.readLine()) != null) {
                     TelegramMessage msg = dataMapper.mapTelegramMessage(line);
-                    //System.out.println("Calling interactor");
-                    interactor.messageReceived(msg);
+                    interactorFactory.getInteractor().messageReceived(msg);
                 }
                 // At this point, the process has been killed
                 procs.remove(peer);

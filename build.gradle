@@ -17,6 +17,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.5'
 }
 
+test {
+    exclude 'ai/quantumsense/tgmonitor/telethon/**'
+}
+
 allprojects {
     repositories {
         maven { url "https://jitpack.io" }
@@ -25,4 +29,6 @@ allprojects {
 dependencies {
     //implementation 'com.github.tg-monitor:backend:86387afc00af800276d5ad094251c1f294a7d9ac'
     compile files('../backend/build/libs/backend-0.0.1.jar')
+    compile files('../monitor/build/libs/monitor-0.0.1.jar')
+
 }

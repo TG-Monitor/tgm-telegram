@@ -1,7 +1,6 @@
 package ai.quantumsense.tgmonitor.telethon;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -24,7 +23,6 @@ import java.io.File;
  */
 public class TelegramAuthTest extends AbsTelegramTest {
 
-    @Ignore
     @Test
     public void login() {
         Assert.assertFalse(fileExists(MASTER_SESSION));
@@ -33,7 +31,6 @@ public class TelegramAuthTest extends AbsTelegramTest {
         Assert.assertTrue(tg.isLoggedIn());
     }
 
-    @Ignore
     @Test
     public void loginButAlreadyLoggedIn() {
         Assert.assertTrue(tg.isLoggedIn());
@@ -46,21 +43,18 @@ public class TelegramAuthTest extends AbsTelegramTest {
         }
     }
 
-    @Ignore
     @Test
     public void isLoggedInIfLoggedOut() {
         //tg.logout();
         Assert.assertFalse(tg.isLoggedIn());
     }
 
-    @Ignore
     @Test
     public void isLoggedInIfLoggedIn() {
         //tg.login(phoneNumber);
         Assert.assertTrue(tg.isLoggedIn());
     }
 
-    @Ignore
     @Test
     public void logout() {
         Assert.assertTrue(tg.isLoggedIn());
@@ -69,7 +63,6 @@ public class TelegramAuthTest extends AbsTelegramTest {
         Assert.assertFalse(fileExists(MASTER_SESSION));
     }
 
-    @Ignore
     @Test
     public void logoutButAlreadyLoggedOut() {
         Assert.assertFalse(tg.isLoggedIn());

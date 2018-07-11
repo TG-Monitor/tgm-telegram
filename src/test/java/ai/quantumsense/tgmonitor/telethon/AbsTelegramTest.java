@@ -4,13 +4,15 @@ import ai.qantumsense.tgmonitor.telethon.DataMapper;
 import ai.qantumsense.tgmonitor.telethon.TelegramImpl;
 import ai.qantumsense.tgmonitor.telethon.datamapping.JsonGsonDataMapper;
 import ai.quantumsense.tgmonitor.backend.Interactor;
-import ai.quantumsense.tgmonitor.backend.LoginCodeReader;
+import ai.quantumsense.tgmonitor.backend.InteractorFactory;
+import ai.quantumsense.tgmonitor.monitor.LoginCodeReader;
 import ai.quantumsense.tgmonitor.backend.Telegram;
 import ai.quantumsense.tgmonitor.backend.pojo.PatternMatch;
 import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
 import org.junit.BeforeClass;
 
 import javax.swing.JOptionPane;
+import java.util.Set;
 
 /**
  * Common code for the two Telegram test classes TelegramAuthTest and
@@ -42,7 +44,7 @@ public abstract class AbsTelegramTest {
             throw new RuntimeException("Must set TG_API_ID and TG_API_HASH environment variables");
         DataMapper mapper = new JsonGsonDataMapper();
         LoginCodeReader loginCodeReader = () -> JOptionPane.showInputDialog("Please enter login code");
-        Interactor interactor = new Interactor() {
+        InteractorFactory interactorFactory = () -> new Interactor() {
             @Override
             public void messageReceived(TelegramMessage msg) {
                 System.out.println(msg + "\n*****");
@@ -50,6 +52,6 @@ public abstract class AbsTelegramTest {
             @Override
             public void matchFound(PatternMatch patternMatch) {}
         };
-        tg = new TelegramImpl(tgApiId, tgApiHash, interactor, loginCodeReader, mapper);
+        tg = new TelegramImpl(tgApiId, tgApiHash, mapper, loginCodeReader, interactorFactory);
     }
 }
