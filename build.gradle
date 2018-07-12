@@ -27,5 +27,5 @@ allprojects {
     }
 }
 dependencies {
-    implementation 'com.github.tg-monitor:backend:c954bcdeb8863610513cf70c1e4a594eefa6bca7'
+    implementation 'com.github.tg-monitor:backend:585edff1adfdd33304ee9237fdefc7cd0f45302a'
 }
