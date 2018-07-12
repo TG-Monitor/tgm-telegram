@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
+import java.util.UUID;
 
 public class SessionManagerImpl implements SessionManager {
 
@@ -26,7 +27,7 @@ public class SessionManagerImpl implements SessionManager {
 
     @Override
     public String copyMaster() {
-        String copy = DIR + "/" + String.valueOf(Instant.now().getEpochSecond());
+        String copy = DIR + "/" + getSessionBasename();
         try {
             Files.copy(getPath(MASTER), getPath(copy), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
@@ -43,6 +44,15 @@ public class SessionManagerImpl implements SessionManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Return a unique string for the basename of a new session.
+     */
+    private String getSessionBasename() {
+        String ts = String.valueOf(Instant.now().getEpochSecond());
+        String uuid = UUID.randomUUID().toString();
+        return ts + "-" + uuid;
     }
 
     /**
