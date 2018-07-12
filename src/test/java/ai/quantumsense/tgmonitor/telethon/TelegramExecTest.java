@@ -16,12 +16,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Test the start/stop monitor behaviour of the Telegram implementation.
+ * Test the start()/stop() behaviour of the Telegram implementation.
  *
  * Assuming that you are in a logged in state (i.e. the master.session file
- * exists and is logged in), you can run this test suite as a whole.
+ * exists and is logged in), you can run this test suite in one shot.
  */
 public class TelegramExecTest extends AbsTelegramTest {
+
+    private static final String SESSIONS_DIR = "/tmp/tg-monitor/telethon/sessions";
 
     @Test
     // The sleep(1) calls are needed because the session files and processes
@@ -240,12 +242,12 @@ public class TelegramExecTest extends AbsTelegramTest {
     }
 
     /**
-     * Return the number of *.session files in the current working directory
-     * that are NOT the master.session file.
+     * Return the number of *.session files in the sessions directory that are
+     * NOT the master.session file.
      */
     private int numberOfMonitorSessionFiles(){
         int n = 0;
-        try (DirectoryStream<Path> dir = Files.newDirectoryStream(Paths.get("."), "*.session")) {
+        try (DirectoryStream<Path> dir = Files.newDirectoryStream(Paths.get(SESSIONS_DIR), "*.session")) {
             for (Path p : dir)
                 if (!p.toString().contains("master.session")) n++;
         } catch (IOException e) {

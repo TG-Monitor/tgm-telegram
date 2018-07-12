@@ -23,6 +23,8 @@ import java.io.File;
  */
 public class TelegramAuthTest extends AbsTelegramTest {
 
+    static final String MASTER_SESSION = "/tmp/tg-monitor/telethon/sessions/master.session";
+
     @Test
     public void login() {
         Assert.assertFalse(fileExists(MASTER_SESSION));

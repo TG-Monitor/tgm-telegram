@@ -25,7 +25,6 @@ import java.util.Set;
  *   - PHONE_NUMBER: phone number of the Telegram account to use
  */
 public abstract class AbsTelegramTest {
-    static final String MASTER_SESSION = "master.session";
     static Telegram tg;
     static String phoneNumber;
 
