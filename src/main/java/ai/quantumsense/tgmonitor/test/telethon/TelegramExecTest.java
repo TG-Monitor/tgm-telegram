@@ -1,7 +1,6 @@
-package ai.quantumsense.tgmonitor.telethon;
+package ai.quantumsense.tgmonitor.test.telethon;
 
 import org.junit.Assert;
-import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,17 +18,57 @@ import java.util.Set;
  * Test the start()/stop() behaviour of the Telegram implementation.
  *
  * Assuming that you are in a logged in state (i.e. the master.session file
- * exists and is logged in), you can run this test suite in one shot.
+ * exists and is logged in), you can run all these tests at once.
  */
 public class TelegramExecTest extends AbsTelegramTest {
 
     private static final String SESSIONS_DIR = "/tmp/tg-monitor/telethon/sessions";
 
-    @Test
+    private enum Test {
+        ALL,
+        START_AND_STOP,
+        START_AND_STOP_MULTIPLE,
+        GET_NUMBER_OF_MONITORS,
+        GET_MONITORS,
+        START_BUT_ALREADY_EXISTS,
+        STOP_BUT_DOES_NOT_EXIST
+    }
+
+    public static void main(String[] args) {
+        Test test = Test.START_AND_STOP;
+        switch(test) {
+            case START_AND_STOP:
+                startAndStop();
+                break;
+            case START_AND_STOP_MULTIPLE:
+                startAndStopMultiple();
+                break;
+            case GET_NUMBER_OF_MONITORS:
+                getNumberOfMonitors();
+                break;
+            case GET_MONITORS:
+                getMonitors();
+                break;
+            case START_BUT_ALREADY_EXISTS:
+                startButAlreadyExists();
+                break;
+            case STOP_BUT_DOES_NOT_EXIST:
+                stopButDoesNotExist();
+                break;
+            case ALL:
+                startAndStop();
+                startAndStopMultiple();
+                getNumberOfMonitors();
+                getMonitors();
+                startButAlreadyExists();
+                stopButDoesNotExist();
+        }
+    }
+
     // The sleep(1) calls are needed because the session files and processes
     // are created/removed asynchronously by a thread. So, at the time the
     // start()/stop() methods return, they might not yet be there/removed.
-    public void startAndStop() {
+    private static void startAndStop() {
         String peer = "the_englishclub";
 
         Assert.assertTrue(tg.isLoggedIn());
@@ -53,11 +92,10 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Test
     // The sleep(1) calls are needed because the session files and processes
     // are created/removed asynchronously by a thread. So, at the time the
     // start()/stop() methods return, they might not yet be there/removed.
-    public void startAndStopMultiple() {
+    private static void startAndStopMultiple() {
         String peer1 = "the_englishclub";
         String peer2 = "savedroid";
 
@@ -98,8 +136,7 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Test
-    public void getNumberOfMonitors() {
+    private static void getNumberOfMonitors() {
         String peer1 = "the_englishclub";
         String peer2 = "savedroid";
 
@@ -131,8 +168,7 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Test
-    public void getMonitors() {
+    private static void getMonitors() {
         String peer1 = "the_englishclub";
         String peer2 = "savedroid";
 
@@ -168,8 +204,7 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Test
-    public void startButAlreadyExists() {
+    private static void startButAlreadyExists() {
         String peer = "the_englishclub";
         Assert.assertTrue(tg.isLoggedIn());
         System.out.println("Starting monitor: " + peer);
@@ -190,8 +225,7 @@ public class TelegramExecTest extends AbsTelegramTest {
         waitForMonitorThreads();
     }
 
-    @Test
-    public void stopButDoesNotExist() {
+    private static void stopButDoesNotExist() {
         String peer = "the_englishclub";
         Assert.assertTrue(tg.isLoggedIn());
         Assert.assertFalse(tg.getMonitors().contains(peer));
@@ -211,7 +245,7 @@ public class TelegramExecTest extends AbsTelegramTest {
      * This is needed in JUnit, as the tests would terminate as soon as the
      * main thread exits.
      */
-    private void waitForMonitorThreads() {
+    private static void waitForMonitorThreads() {
         boolean stillRunning;
         do {
             sleep(1);
@@ -226,8 +260,8 @@ public class TelegramExecTest extends AbsTelegramTest {
      * Return the number of processes executing the monitor_peer.py script.
      * Implementation: count lines printed by ps -ef | grep "monitor_peer.p[y]"
      */
-    private int numberOfMonitorProcesses() {
-        String script = this.getClass().getResource( "/count.sh").getPath();
+    private static int numberOfMonitorProcesses() {
+        String script = TelegramExecTest.class.getResource( "/count.sh").getPath();
         int n = 0;
         ProcessBuilder pb = new ProcessBuilder(script);
         try {
@@ -245,7 +279,7 @@ public class TelegramExecTest extends AbsTelegramTest {
      * Return the number of *.session files in the sessions directory that are
      * NOT the master.session file.
      */
-    private int numberOfMonitorSessionFiles(){
+    private static int numberOfMonitorSessionFiles(){
         int n = 0;
         try (DirectoryStream<Path> dir = Files.newDirectoryStream(Paths.get(SESSIONS_DIR), "*.session")) {
             for (Path p : dir)
@@ -259,7 +293,7 @@ public class TelegramExecTest extends AbsTelegramTest {
     /**
      * Cause main thread to sleep for the specified number of seconds.
      */
-    private void sleep(int seconds) {
+    private static void sleep(int seconds) {
         try {
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException e) {

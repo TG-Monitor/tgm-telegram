@@ -1,4 +1,4 @@
-package ai.qantumsense.tgmonitor.telethon;
+package ai.quantumsense.tgmonitor.telethon;
 
 import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
 

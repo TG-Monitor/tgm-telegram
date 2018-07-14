@@ -1,6 +1,6 @@
-package ai.qantumsense.tgmonitor.telethon.session;
+package ai.quantumsense.tgmonitor.telethon.session;
 
-import ai.qantumsense.tgmonitor.telethon.SessionManager;
+import ai.quantumsense.tgmonitor.telethon.SessionManager;
 
 import java.io.File;
 import java.io.IOException;

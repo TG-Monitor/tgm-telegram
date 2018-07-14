@@ -12,13 +12,13 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'junit', name: 'junit', version: '4.12'
     compile 'com.google.code.findbugs:jsr305:3.0.2'
     compile 'com.google.code.gson:gson:2.8.5'
 }
 
-test {
-    exclude 'ai/quantumsense/tgmonitor/telethon/**'
+jar {
+    exclude('ai/quantumsense/tgmonitor/test/**')
 }
 
 allprojects {
@@ -26,6 +26,11 @@ allprojects {
         maven { url "https://jitpack.io" }
     }
 }
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 dependencies {
-    implementation 'com.github.tg-monitor:backend:585edff1adfdd33304ee9237fdefc7cd0f45302a'
+    implementation 'com.github.tg-monitor:backend:master-SNAPSHOT'
 }

@@ -1,15 +1,13 @@
-package ai.quantumsense.tgmonitor.telethon;
+package ai.quantumsense.tgmonitor.test.telethon;
 
 import org.junit.Assert;
-import org.junit.Test;
-
 import java.io.File;
 
 /**
  * Testing the login/logout behaviour of the Telegram implementation.
  *
  * CAUTION: you cannot not log in into Telegram too many times in a short time.
- * After 4 to 5 logins in a short time (a couple of minutes), the Telegram API
+ * After 4 to 5 logins in a within as much as 1-2 hours, the Telegram API
  * returns a FloodWaitError and you have to wait about 20 hours before you can
  * log in again with this phone number.
  *
@@ -17,24 +15,54 @@ import java.io.File;
  * all a login() at the beginning and a logout() at the end, because that would
  * likely result in too many logins and a FloodWaitError.
  *
- * So, don't run this test suite as a whole, but run the tests individually,
- * and be cautious to reuse a state where you are logged in for other tests,
- * in order to prevent too many login attempts.
+ * When running these tests, be cautious and reuse an existing logged in state
+ * whenever possible in order to minimise the number of login attempts.
  */
 public class TelegramAuthTest extends AbsTelegramTest {
 
     static final String MASTER_SESSION = "/tmp/tg-monitor/telethon/sessions/master.session";
 
-    @Test
-    public void login() {
+    private enum Test {
+        LOGIN,
+        LOGIN_BUT_ALREADY_LOGGED_IN,
+        IS_LOGGED_IN_IF_LOGGED_OUT,
+        IS_LOGGED_IN_IF_LOGGED_IN,
+        LOGOUT,
+        LOGOUT_BUT_ALREADY_LOGGED_OUT;
+    }
+
+    public static void main(String[] args) {
+        Test test = Test.LOGIN;
+        switch(test) {
+            case LOGIN:
+                login();
+                break;
+            case LOGIN_BUT_ALREADY_LOGGED_IN:
+                loginButAlreadyLoggedIn();
+                break;
+            case IS_LOGGED_IN_IF_LOGGED_IN:
+                isLoggedInIfLoggedIn();
+                break;
+            case IS_LOGGED_IN_IF_LOGGED_OUT:
+                isLoggedInIfLoggedOut();
+                break;
+            case LOGOUT:
+                logout();
+                break;
+            case LOGOUT_BUT_ALREADY_LOGGED_OUT:
+                logoutButAlreadyLoggedOut();
+                break;
+        }
+    }
+
+    private static void login() {
         Assert.assertFalse(fileExists(MASTER_SESSION));
         tg.login(phoneNumber);
         Assert.assertTrue(fileExists(MASTER_SESSION));
         Assert.assertTrue(tg.isLoggedIn());
     }
 
-    @Test
-    public void loginButAlreadyLoggedIn() {
+    private static void loginButAlreadyLoggedIn() {
         Assert.assertTrue(tg.isLoggedIn());
         try {
             tg.login(phoneNumber);
@@ -45,35 +73,31 @@ public class TelegramAuthTest extends AbsTelegramTest {
         }
     }
 
-    @Test
-    public void isLoggedInIfLoggedOut() {
+    private static void isLoggedInIfLoggedOut() {
         //tg.logout();
         Assert.assertFalse(tg.isLoggedIn());
     }
 
-    @Test
-    public void isLoggedInIfLoggedIn() {
+    private static void isLoggedInIfLoggedIn() {
         //tg.login(phoneNumber);
         Assert.assertTrue(tg.isLoggedIn());
     }
 
-    @Test
-    public void logout() {
+    private static void logout() {
         Assert.assertTrue(tg.isLoggedIn());
         tg.logout();
         Assert.assertFalse(tg.isLoggedIn());
         Assert.assertFalse(fileExists(MASTER_SESSION));
     }
 
-    @Test
-    public void logoutButAlreadyLoggedOut() {
+    private static void logoutButAlreadyLoggedOut() {
         Assert.assertFalse(tg.isLoggedIn());
         tg.logout();
         Assert.assertFalse(tg.isLoggedIn());
         Assert.assertFalse(fileExists(MASTER_SESSION));
     }
 
-    private boolean fileExists(String path) {
+    private static boolean fileExists(String path) {
         File f = new File(path);
         return f.exists();
     }

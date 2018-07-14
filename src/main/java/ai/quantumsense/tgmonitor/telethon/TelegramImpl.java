@@ -1,11 +1,12 @@
-package ai.qantumsense.tgmonitor.telethon;
+package ai.quantumsense.tgmonitor.telethon;
 
-import ai.qantumsense.tgmonitor.telethon.script.ScriptManagerImpl;
-import ai.qantumsense.tgmonitor.telethon.session.SessionManagerImpl;
-import ai.quantumsense.tgmonitor.backend.InteractorFactory;
-import ai.quantumsense.tgmonitor.backend.Telegram;
+import ai.quantumsense.tgmonitor.telethon.script.ScriptManagerImpl;
+import ai.quantumsense.tgmonitor.telethon.session.SessionManagerImpl;
+import ai.quantumsense.tgmonitor.backend.Interactor;
+import ai.quantumsense.tgmonitor.monitor.LoginCodePrompt;
+import ai.quantumsense.tgmonitor.monitor.Telegram;
 import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
-import ai.quantumsense.tgmonitor.monitor.LoginCodeReader;
+import ai.quantumsense.tgmonitor.servicelocator.ServiceLocator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,15 +35,15 @@ public class TelegramImpl implements Telegram {
     private String tgApiId;
     private String tgApiHash;
     private DataMapper dataMapper;
-    private LoginCodeReader loginCodeReader;
-    private InteractorFactory interactorFactory;
+    private ServiceLocator<Interactor> interactorLocator;
+    private ServiceLocator<LoginCodePrompt> loginCodePromptLocator;
 
-    public TelegramImpl(String tgApiId, String tgApiHash, DataMapper dataMapper, LoginCodeReader loginCodeReader, InteractorFactory interactorFactory) {
+    public TelegramImpl(String tgApiId, String tgApiHash, DataMapper dataMapper, ServiceLocator<Interactor> interactorLocator, ServiceLocator<LoginCodePrompt> loginCodePromptLocator) {
         this.tgApiId = tgApiId;
         this.tgApiHash = tgApiHash;
         this.dataMapper = dataMapper;
-        this.loginCodeReader = loginCodeReader;
-        this.interactorFactory = interactorFactory;
+        this.interactorLocator = interactorLocator;
+        this.loginCodePromptLocator = loginCodePromptLocator;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class TelegramImpl implements Telegram {
         if (phoneCodeHash.equals("null"))
             throw new RuntimeException("Attempting to log in, but already logged in");
         // Prompt user to input login code
-        String loginCode = loginCodeReader.getLoginCodeFromUser();
+        String loginCode = loginCodePromptLocator.getService().promptLoginCode();
         // Complete login with login code
         scriptMgr.run(LOGIN_SUBMIT, tgApiId, tgApiHash, masterSession, phoneNumber, loginCode, phoneCodeHash);
     }
@@ -124,7 +125,7 @@ public class TelegramImpl implements Telegram {
         try {
             while ((line = stdout.readLine()) != null) {
                 TelegramMessage msg = dataMapper.mapTelegramMessage(line);
-                interactorFactory.getInteractor().messageReceived(msg);
+                interactorLocator.getService().messageReceived(msg);
             }
         } catch (IOException e) {
             e.printStackTrace();

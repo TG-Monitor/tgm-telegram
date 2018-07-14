@@ -1,6 +1,6 @@
-package ai.qantumsense.tgmonitor.telethon.script;
+package ai.quantumsense.tgmonitor.telethon.script;
 
-import ai.qantumsense.tgmonitor.telethon.ScriptManager;
+import ai.quantumsense.tgmonitor.telethon.ScriptManager;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
