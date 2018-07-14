@@ -20,7 +20,7 @@ import java.io.File;
  */
 public class TelegramAuthTest extends AbsTelegramTest {
 
-    static final String MASTER_SESSION = "/tmp/tg-monitor/telegram/sessions/master.session";
+    static final String MASTER_SESSION = "/var/tmp/tg-monitor/telethon/sessions/master.session";
 
     private enum Test {
         LOGIN,
@@ -32,7 +32,7 @@ public class TelegramAuthTest extends AbsTelegramTest {
     }
 
     public static void main(String[] args) {
-        Test test = Test.LOGIN;
+        Test test = Test.IS_LOGGED_IN_IF_LOGGED_IN;
         switch(test) {
             case LOGIN:
                 login();

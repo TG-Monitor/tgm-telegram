@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class SessionManagerImpl implements SessionManager {
 
-    private static final String DIR = "/tmp/tg-monitor/telegram/sessions";
+    private static final String DIR = "/var/tmp/tg-monitor/telethon/sessions";
     private static final String MASTER = DIR + "/master";
 
     @Override

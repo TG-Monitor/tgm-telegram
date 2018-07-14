@@ -18,7 +18,7 @@ public class ScriptManagerImpl implements ScriptManager {
     /**
      * Directory where scripts are installed on the local system.
      */
-    private static final String DIR = "/tmp/tg-monitor/telegram/scripts";
+    private static final String DIR = "/var/tmp/tg-monitor/telethon/scripts";
 
     @Override
     public String run(String script, String... args) {

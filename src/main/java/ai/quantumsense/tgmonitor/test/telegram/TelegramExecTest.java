@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class TelegramExecTest extends AbsTelegramTest {
 
-    private static final String SESSIONS_DIR = "/tmp/tg-monitor/telegram/sessions";
+    private static final String SESSIONS_DIR = "/var/tmp/tg-monitor/telethon/sessions";
 
     private enum Test {
         ALL,
@@ -261,7 +261,7 @@ public class TelegramExecTest extends AbsTelegramTest {
      * Implementation: count lines printed by ps -ef | grep "monitor_peer.p[y]"
      */
     private static int numberOfMonitorProcesses() {
-        String script = TelegramExecTest.class.getResource( "/count.sh").getPath();
+        String script = TelegramExecTest.class.getResource( "/test/count_monitor_procs.sh").getPath();
         int n = 0;
         ProcessBuilder pb = new ProcessBuilder(script);
         try {
