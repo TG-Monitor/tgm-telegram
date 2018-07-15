@@ -32,7 +32,7 @@ public class TelegramAuthTest extends AbsTelegramTest {
     }
 
     public static void main(String[] args) {
-        Test test = Test.IS_LOGGED_IN_IF_LOGGED_IN;
+        Test test = Test.IS_LOGGED_IN_IF_LOGGED_OUT;
         switch(test) {
             case LOGIN:
                 login();

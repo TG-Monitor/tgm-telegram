@@ -35,7 +35,7 @@ public class TelegramExecTest extends AbsTelegramTest {
     }
 
     public static void main(String[] args) {
-        Test test = Test.START_AND_STOP;
+        Test test = Test.ALL;
         switch(test) {
             case START_AND_STOP:
                 startAndStop();
@@ -239,11 +239,11 @@ public class TelegramExecTest extends AbsTelegramTest {
     }
 
     /**
-     * Prevent the main thread from exiting while any "tg-monitor" threads are
-     * still running.
+     * Pause the main thread as long as any "tg-monitor" threads are running.
      *
-     * This is needed in JUnit, as the tests would terminate as soon as the
-     * main thread exits.
+     * This is necessary for running multiple of above test methods after
+     * another (e.g. with the ALL test) in order to prevent the main thread
+     * from starting a new method before the previous method terminated.
      */
     private static void waitForMonitorThreads() {
         boolean stillRunning;
