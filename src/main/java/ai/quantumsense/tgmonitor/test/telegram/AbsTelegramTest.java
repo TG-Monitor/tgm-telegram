@@ -1,5 +1,7 @@
 package ai.quantumsense.tgmonitor.test.telegram;
 
+import ai.quantumsense.tgmonitor.entities.Peers;
+import ai.quantumsense.tgmonitor.entities.PeersImpl;
 import ai.quantumsense.tgmonitor.telegram.DataMapper;
 import ai.quantumsense.tgmonitor.telegram.TelegramImpl;
 import ai.quantumsense.tgmonitor.telegram.datamapping.JsonGsonDataMapper;
@@ -28,6 +30,26 @@ public abstract class AbsTelegramTest {
         phoneNumber = System.getenv("PHONE_NUMBER");
         if (phoneNumber == null)
             throw new RuntimeException("Must set PHONE_NUMBER environment variable");
+    }
+
+    static ServiceLocator<Peers> peersLocator;
+    static {
+        peersLocator = new ServiceLocator<Peers>() {
+            private Peers instance = null;
+            @Override
+            public void registerService(Peers peers) {
+                instance = peers;
+            }
+            @Override
+            public Peers getService() {
+                return instance;
+            }
+        };
+    }
+
+    static Peers peers;
+    static {
+        peers = new PeersImpl(peersLocator);
     }
 
     static Telegram tg;
@@ -65,6 +87,6 @@ public abstract class AbsTelegramTest {
                 };
             }
         };
-        tg = new TelegramImpl(tgApiId, tgApiHash, mapper, interactorLocator, loginCodePromptLocator);
+        tg = new TelegramImpl(tgApiId, tgApiHash, mapper, peersLocator, interactorLocator, loginCodePromptLocator);
     }
 }

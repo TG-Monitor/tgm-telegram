@@ -20,19 +20,18 @@ import java.io.File;
  */
 public class TelegramAuthTest extends AbsTelegramTest {
 
-    static final String MASTER_SESSION = "/var/tmp/tg-monitor/telethon/sessions/master.session";
+    static final String SESSION_FILE = "/var/tmp/tg-monitor/telethon/tg-monitor.session";
 
     private enum Test {
         LOGIN,
         LOGIN_BUT_ALREADY_LOGGED_IN,
         IS_LOGGED_IN_IF_LOGGED_OUT,
         IS_LOGGED_IN_IF_LOGGED_IN,
-        LOGOUT,
-        LOGOUT_BUT_ALREADY_LOGGED_OUT;
+        LOGOUT
     }
 
     public static void main(String[] args) {
-        Test test = Test.IS_LOGGED_IN_IF_LOGGED_IN;
+        Test test = Test.LOGIN_BUT_ALREADY_LOGGED_IN;
         switch(test) {
             case LOGIN:
                 login();
@@ -49,16 +48,13 @@ public class TelegramAuthTest extends AbsTelegramTest {
             case LOGOUT:
                 logout();
                 break;
-            case LOGOUT_BUT_ALREADY_LOGGED_OUT:
-                logoutButAlreadyLoggedOut();
-                break;
         }
     }
 
     private static void login() {
-        Assert.assertFalse(fileExists(MASTER_SESSION));
+        Assert.assertFalse(fileExists(SESSION_FILE));
         tg.login(phoneNumber);
-        Assert.assertTrue(fileExists(MASTER_SESSION));
+        Assert.assertTrue(fileExists(SESSION_FILE));
         Assert.assertTrue(tg.isLoggedIn());
     }
 
@@ -84,17 +80,9 @@ public class TelegramAuthTest extends AbsTelegramTest {
     }
 
     private static void logout() {
-        Assert.assertTrue(tg.isLoggedIn());
         tg.logout();
         Assert.assertFalse(tg.isLoggedIn());
-        Assert.assertFalse(fileExists(MASTER_SESSION));
-    }
-
-    private static void logoutButAlreadyLoggedOut() {
-        Assert.assertFalse(tg.isLoggedIn());
-        tg.logout();
-        Assert.assertFalse(tg.isLoggedIn());
-        Assert.assertFalse(fileExists(MASTER_SESSION));
+        Assert.assertFalse(fileExists(SESSION_FILE));
     }
 
     private static boolean fileExists(String path) {
