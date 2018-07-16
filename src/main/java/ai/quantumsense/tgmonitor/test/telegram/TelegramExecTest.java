@@ -18,7 +18,7 @@ public class TelegramExecTest extends AbsTelegramTest {
     public static void main(String[] args) {
 
         System.out.println("Starting monitor");
-        tg.startReading();
+        tg.start();
 
         System.out.println("Adding peer: " + peer1);
         peers.addPeer(peer1);
@@ -37,7 +37,7 @@ public class TelegramExecTest extends AbsTelegramTest {
         sleep(15);
 
         System.out.println("Stopping monitor");
-        tg.stopReading();
+        tg.stop();
     }
 
     private static void sleep(int sec) {

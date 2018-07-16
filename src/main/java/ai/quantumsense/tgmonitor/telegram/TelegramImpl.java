@@ -24,7 +24,7 @@ public class TelegramImpl implements Telegram {
     private SessionManager sessionMgr = new SessionManagerImpl();
     private final String SESSION = sessionMgr.getSessionName();
 
-    private boolean isReading = false;
+    private boolean isRunning = false;
     private Process readerProcess = null;
 
     private String tgApiId;
@@ -57,7 +57,7 @@ public class TelegramImpl implements Telegram {
 
     @Override
     public void logout() {
-        if (isReading()) stopReading();
+        if (isRunning()) stop();
         scriptMgr.run(LOGOUT, tgApiId, tgApiHash, SESSION);
     }
 
@@ -68,35 +68,35 @@ public class TelegramImpl implements Telegram {
     }
 
     @Override
-    public void startReading() {
+    public void start() {
         if (!isLoggedIn())
             throw new RuntimeException("Attempting to start monitor, but system is not logged in");
-        if (isReading())
+        if (isRunning())
             throw new RuntimeException("Attempting to start monitor, but is already running");
-        isReading = true;
+        isRunning = true;
         Thread thread = new Thread(() -> {
             readerProcess = scriptMgr.launch(READ_MESSAGES, tgApiId, tgApiHash, SESSION);
             readMessages(readerProcess);
             // At this point, the process has been killed
-            isReading = false;
+            isRunning = false;
         });
         thread.start();
     }
 
     @Override
-    public void stopReading() {
+    public void stop() {
         if (!isLoggedIn())
             throw new RuntimeException("Attempting to start monitor, but system is not logged in");
-        if (!isReading())
+        if (!isRunning())
             throw new RuntimeException("Attempting to stop monitor, but is not running");
         readerProcess.destroy();
         readerProcess = null;
-        isReading = false;
+        isRunning = false;
     }
 
     @Override
-    public boolean isReading() {
-        return isReading;
+    public boolean isRunning() {
+        return isRunning;
     }
 
     /**
