@@ -253,7 +253,7 @@ public class TelegramExecTest extends AbsTelegramTest {
             for (Thread t : Thread.getAllStackTraces().keySet())
                 if (t.getName().equals("tg-monitor")) stillRunning = true;
         } while (stillRunning);
-        System.out.println("Main thread exited");
+        System.out.println("All monitor threads (and processes) have terminated");
     }
 
     /**

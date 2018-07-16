@@ -125,7 +125,10 @@ public class TelegramImpl implements Telegram {
         try {
             while ((line = stdout.readLine()) != null) {
                 TelegramMessage msg = dataMapper.mapTelegramMessage(line);
-                interactorLocator.getService().messageReceived(msg);
+                System.out.println("TelegramImpl: receiving message: " + msg.getText());
+                Interactor interactor = interactorLocator.getService();
+                System.out.println("TelegramImpl: now notifying interactor: " + interactor);
+                interactor.messageReceived(msg);
             }
         } catch (IOException e) {
             e.printStackTrace();
