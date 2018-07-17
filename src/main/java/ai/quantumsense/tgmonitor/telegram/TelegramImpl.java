@@ -19,6 +19,7 @@ public class TelegramImpl implements Telegram {
     private static final String LOGIN_REQUEST = "login_code_request.py";
     private static final String LOGIN_SUBMIT = "login_code_submit.py";
     private static final String IS_LOGGED_IN = "is_logged_in.py";
+    private static final String GET_PHONE_NUMBER = "get_phone_number.py";
     private static final String LOGOUT = "logout.py";
     private static final String READ_MESSAGES = "read_messages.py";
 
@@ -68,9 +69,16 @@ public class TelegramImpl implements Telegram {
     }
 
     @Override
+    public String getPhoneNumber() {
+        if (!isLoggedIn())
+            throw new RuntimeException("Attempting to get phone number of logged in user, but not logged in");
+        return scriptMgr.run(GET_PHONE_NUMBER, tgApiId, tgApiHash, SESSION);
+    }
+
+    @Override
     public void start() {
         if (!isLoggedIn())
-            throw new RuntimeException("Attempting to start monitor, but system is not logged in");
+            throw new RuntimeException("Attempting to start monitor, but not logged in");
         if (isRunning())
             throw new RuntimeException("Attempting to start monitor, but is already running");
         isRunning = true;
@@ -86,7 +94,7 @@ public class TelegramImpl implements Telegram {
     @Override
     public void stop() {
         if (!isLoggedIn())
-            throw new RuntimeException("Attempting to start monitor, but system is not logged in");
+            throw new RuntimeException("Attempting to start monitor, but not logged in");
         if (!isRunning())
             throw new RuntimeException("Attempting to stop monitor, but is not running");
         readerProcess.destroy();
