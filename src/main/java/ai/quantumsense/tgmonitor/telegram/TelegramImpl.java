@@ -1,10 +1,12 @@
 package ai.quantumsense.tgmonitor.telegram;
 
 import ai.quantumsense.tgmonitor.backend.Interactor;
+import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
 import ai.quantumsense.tgmonitor.entities.Peers;
 import ai.quantumsense.tgmonitor.monitor.LoginCodePrompt;
 import ai.quantumsense.tgmonitor.monitor.Telegram;
 import ai.quantumsense.tgmonitor.servicelocator.ServiceLocator;
+import ai.quantumsense.tgmonitor.telegram.filter.FilterImpl;
 import ai.quantumsense.tgmonitor.telegram.script.ScriptManagerImpl;
 import ai.quantumsense.tgmonitor.telegram.session.SessionManagerImpl;
 
@@ -29,18 +31,16 @@ public class TelegramImpl implements Telegram {
 
     private String tgApiId;
     private String tgApiHash;
-    private DataMapper dataMapper;
-    private ServiceLocator<Peers> peersLocator;
+    private Filter filter;
     private ServiceLocator<Interactor> interactorLocator;
     private ServiceLocator<LoginCodePrompt> loginCodePromptLocator;
 
-    public TelegramImpl(String tgApiId, String tgApiHash, DataMapper dataMapper, ServiceLocator<Peers> peersLocator, ServiceLocator<Interactor> interactorLocator, ServiceLocator<LoginCodePrompt> loginCodePromptLocator) {
+    public TelegramImpl(String tgApiId, String tgApiHash, ServiceLocator<Peers> peersLocator, ServiceLocator<Interactor> interactorLocator, ServiceLocator<LoginCodePrompt> loginCodePromptLocator) {
         this.tgApiId = tgApiId;
         this.tgApiHash = tgApiHash;
-        this.dataMapper = dataMapper;
-        this.peersLocator = peersLocator;
         this.interactorLocator = interactorLocator;
         this.loginCodePromptLocator = loginCodePromptLocator;
+        filter = new FilterImpl(peersLocator);
     }
 
     @Override
@@ -115,29 +115,12 @@ public class TelegramImpl implements Telegram {
         String line;
         try {
             while ((line = stdout.readLine()) != null) {
-                String msg = filter(line);
-                if (msg == null) continue;
-                interactorLocator.getService().messageReceived(dataMapper.mapTelegramMessage(msg));
+                TelegramMessage msg = filter.filterAndParse(line);
+                if (msg != null)
+                    interactorLocator.getService().messageReceived(msg);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Parse output line of the read_messages.py script for a single received
-     * message, and check if this message is from one of the peers that are
-     * currently set to be monitored.
-     *
-     * If yes, return the serialized representation of this message, as output
-     * by the read_messages.py script. If the message is from a peer that is
-     * currently not monitored, return null.
-     */
-    private String filter(String line) {
-        String[] a = line.split(" ", 2);
-        for (String p : peersLocator.getService().getPeers()) {
-            if (a[0].toLowerCase().equals(p.toLowerCase())) return a[1];
-        }
-        return null;
     }
 }

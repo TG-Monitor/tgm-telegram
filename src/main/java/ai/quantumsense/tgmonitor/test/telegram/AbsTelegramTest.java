@@ -2,9 +2,9 @@ package ai.quantumsense.tgmonitor.test.telegram;
 
 import ai.quantumsense.tgmonitor.entities.Peers;
 import ai.quantumsense.tgmonitor.entities.PeersImpl;
-import ai.quantumsense.tgmonitor.telegram.DataMapper;
+import ai.quantumsense.tgmonitor.telegram.Filter;
 import ai.quantumsense.tgmonitor.telegram.TelegramImpl;
-import ai.quantumsense.tgmonitor.telegram.datamapping.JsonGsonDataMapper;
+import ai.quantumsense.tgmonitor.telegram.filter.FilterImpl;
 import ai.quantumsense.tgmonitor.backend.Interactor;
 import ai.quantumsense.tgmonitor.monitor.LoginCodePrompt;
 import ai.quantumsense.tgmonitor.monitor.Telegram;
@@ -58,7 +58,6 @@ public abstract class AbsTelegramTest {
         String tgApiHash = System.getenv("TG_API_HASH");
         if (tgApiId == null || tgApiHash == null)
             throw new RuntimeException("Must set TG_API_ID and TG_API_HASH environment variables");
-        DataMapper mapper = new JsonGsonDataMapper();
         ServiceLocator<Interactor> interactorLocator = new ServiceLocator<Interactor>() {
             @Override
             public void registerService(Interactor interactor) {}
@@ -87,6 +86,6 @@ public abstract class AbsTelegramTest {
                 };
             }
         };
-        tg = new TelegramImpl(tgApiId, tgApiHash, mapper, peersLocator, interactorLocator, loginCodePromptLocator);
+        tg = new TelegramImpl(tgApiId, tgApiHash, peersLocator, interactorLocator, loginCodePromptLocator);
     }
 }
