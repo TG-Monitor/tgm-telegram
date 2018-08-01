@@ -1,18 +1,16 @@
 package ai.quantumsense.tgmonitor.test.telegram;
 
-import ai.quantumsense.tgmonitor.entities.Peers;
-import ai.quantumsense.tgmonitor.entities.PeersImpl;
-import ai.quantumsense.tgmonitor.telegram.Filter;
-import ai.quantumsense.tgmonitor.telegram.TelegramImpl;
-import ai.quantumsense.tgmonitor.telegram.filter.FilterImpl;
 import ai.quantumsense.tgmonitor.backend.Interactor;
-import ai.quantumsense.tgmonitor.monitor.LoginCodePrompt;
-import ai.quantumsense.tgmonitor.monitor.Telegram;
 import ai.quantumsense.tgmonitor.backend.pojo.PatternMatch;
 import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
+import ai.quantumsense.tgmonitor.entities.Peers;
+import ai.quantumsense.tgmonitor.entities.PeersImpl;
+import ai.quantumsense.tgmonitor.logincodeprompt.LoginCodePrompt;
+import ai.quantumsense.tgmonitor.monitor.Telegram;
 import ai.quantumsense.tgmonitor.servicelocator.ServiceLocator;
+import ai.quantumsense.tgmonitor.telegram.TelegramImpl;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 /**
  * Common code for the two test applications TelegramAuthTest and

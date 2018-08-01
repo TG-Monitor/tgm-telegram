@@ -3,7 +3,7 @@ package ai.quantumsense.tgmonitor.telegram;
 import ai.quantumsense.tgmonitor.backend.Interactor;
 import ai.quantumsense.tgmonitor.backend.pojo.TelegramMessage;
 import ai.quantumsense.tgmonitor.entities.Peers;
-import ai.quantumsense.tgmonitor.monitor.LoginCodePrompt;
+import ai.quantumsense.tgmonitor.logincodeprompt.LoginCodePrompt;
 import ai.quantumsense.tgmonitor.monitor.Telegram;
 import ai.quantumsense.tgmonitor.servicelocator.ServiceLocator;
 import ai.quantumsense.tgmonitor.telegram.filter.FilterImpl;
