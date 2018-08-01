@@ -34,25 +34,20 @@ public class TelegramImpl implements Telegram {
     private String tgApiHash;
     private Filter filter;
     private ServiceLocator<Interactor> interactorLocator;
-    private ServiceLocator<LoginCodePrompt> loginCodePromptLocator;
 
-    public TelegramImpl(String tgApiId, String tgApiHash, ServiceLocator<Peers> peersLocator, ServiceLocator<Interactor> interactorLocator, ServiceLocator<LoginCodePrompt> loginCodePromptLocator) {
+    public TelegramImpl(String tgApiId, String tgApiHash, ServiceLocator<Peers> peersLocator, ServiceLocator<Interactor> interactorLocator) {
         this.tgApiId = tgApiId;
         this.tgApiHash = tgApiHash;
         this.interactorLocator = interactorLocator;
-        this.loginCodePromptLocator = loginCodePromptLocator;
         filter = new FilterImpl(peersLocator);
     }
 
     @Override
-    public void login(String phoneNumber) {
+    public void login(String phoneNumber, LoginCodePrompt loginCodePrompt) {
         if (isLoggedIn())
             throw new RuntimeException("Attempting to log in, but already logged in");
-        // Send login code to user's device
         String phoneCodeHash = scriptMgr.run(LOGIN_REQUEST, tgApiId, tgApiHash, SESSION, phoneNumber);
-        // Prompt user to input login code
-        String loginCode = loginCodePromptLocator.getService().promptLoginCode();
-        // Complete login with login code
+        String loginCode = loginCodePrompt.promptLoginCode();
         scriptMgr.run(LOGIN_SUBMIT, tgApiId, tgApiHash, SESSION, phoneNumber, loginCode, phoneCodeHash);
     }
 

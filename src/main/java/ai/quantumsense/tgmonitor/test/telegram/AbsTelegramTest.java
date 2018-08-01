@@ -32,9 +32,7 @@ public abstract class AbsTelegramTest {
             throw new RuntimeException("Must set PHONE_NUMBER environment variable");
     }
 
-    static ServiceLocator<Peers> peersLocator;
-    static {
-        peersLocator = new ServiceLocator<Peers>() {
+    static ServiceLocator<Peers> peersLocator= new ServiceLocator<Peers>() {
             private Peers instance = null;
             @Override
             public void registerService(Peers peers) {
@@ -45,12 +43,15 @@ public abstract class AbsTelegramTest {
                 return instance;
             }
         };
-    }
 
-    static Peers peers;
-    static {
-        peers = new PeersImpl(peersLocator);
-    }
+    static Peers peers = new PeersImpl(peersLocator);
+
+    static LoginCodePrompt loginCodePrompt = new LoginCodePrompt() {
+        @Override
+        public String promptLoginCode() {
+            return JOptionPane.showInputDialog("Please enter login code");
+        }
+    };
 
     static Telegram tg;
     static {
@@ -73,19 +74,6 @@ public abstract class AbsTelegramTest {
                 };
             }
         };
-        ServiceLocator<LoginCodePrompt> loginCodePromptLocator = new ServiceLocator<LoginCodePrompt>() {
-            @Override
-            public void registerService(LoginCodePrompt loginCodePrompt) {}
-            @Override
-            public LoginCodePrompt getService() {
-                return new LoginCodePrompt() {
-                    @Override
-                    public String promptLoginCode() {
-                        return JOptionPane.showInputDialog("Please enter login code");
-                    }
-                };
-            }
-        };
-        tg = new TelegramImpl(tgApiId, tgApiHash, peersLocator, interactorLocator, loginCodePromptLocator);
+        tg = new TelegramImpl(tgApiId, tgApiHash, peersLocator, interactorLocator);
     }
 }

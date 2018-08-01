@@ -31,7 +31,7 @@ public class TelegramAuthTest extends AbsTelegramTest {
     }
 
     public static void main(String[] args) {
-        Test test = Test.IS_LOGGED_IN_IF_LOGGED_IN;
+        Test test = Test.IS_LOGGED_IN_IF_LOGGED_OUT;
         switch(test) {
             case LOGIN:
                 login();
@@ -53,7 +53,7 @@ public class TelegramAuthTest extends AbsTelegramTest {
 
     private static void login() {
         Assert.assertFalse(fileExists(SESSION_FILE));
-        tg.login(phoneNumber);
+        tg.login(phoneNumber, loginCodePrompt);
         Assert.assertTrue(fileExists(SESSION_FILE));
         Assert.assertTrue(tg.isLoggedIn());
     }
@@ -61,7 +61,7 @@ public class TelegramAuthTest extends AbsTelegramTest {
     private static void loginButAlreadyLoggedIn() {
         Assert.assertTrue(tg.isLoggedIn());
         try {
-            tg.login(phoneNumber);
+            tg.login(phoneNumber, loginCodePrompt);
             Assert.fail("Expected RuntimeException");
         } catch (RuntimeException e) {
             System.out.println("Great, caught RuntimeException: " + e.getMessage());
