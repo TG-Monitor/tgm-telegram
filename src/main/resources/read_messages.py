@@ -39,7 +39,7 @@ session_name = sys.argv[3]
 client = TelegramClient(session_name, api_id, api_hash)
 
 # Caution: keys must coincide with field names in TelegramMessage class
-@client.on(events.NewMessage(incoming=True))
+@client.on(events.NewMessage)
 async def handler(event):
     message = event.message
     data = {}
